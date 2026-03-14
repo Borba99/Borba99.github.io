@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Víttor Borba — Backend Developer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --surface: #111111;
+      --border: #1e1e1e;
+      --accent: #00ff87;
+      --text: #e8e8e8;
+      --muted: #555;
+      --mono: 'Space Mono', monospace;
+      --sans: 'Syne', sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
+
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 1.2rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      background: rgba(10,10,10,0.85);
+      backdrop-filter: blur(12px);
+    }
+
+    .nav-logo {
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.08em;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--accent); }
+
+    .hero {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 8rem 2rem 4rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .hero-tag {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--accent);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.6s 0.2s forwards;
+    }
+
+    .hero-name {
+      font-size: clamp(3rem, 8vw, 7rem);
+      font-weight: 800;
+      line-height: 0.95;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.6s 0.35s forwards;
+    }
+
+    .hero-name span {
+      display: block;
+      color: transparent;
+      -webkit-text-stroke: 1px var(--muted);
+    }
+
+    .hero-desc {
+      font-family: var(--mono);
+      font-size: 0.9rem;
+      color: var(--muted);
+      max-width: 480px;
+      line-height: 1.8;
+      margin-bottom: 3rem;
+      opacity: 0;
+      animation: fadeUp 0.6s 0.5s forwards;
+    }
+
+    .hero-ctas {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp 0.6s 0.65s forwards;
+    }
+
+    .btn {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      padding: 0.9rem 2rem;
+      border-radius: 2px;
+      text-decoration: none;
+      transition: all 0.2s;
+      cursor: pointer;
+      display: inline-block;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #000;
+      border: 1px solid var(--accent);
+      font-weight: 700;
+    }
+
+    .btn-primary:hover {
+      background: transparent;
+      color: var(--accent);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    section {
+      position: relative;
+      z-index: 1;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 6rem 2rem;
+    }
+
+    .section-label {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--accent);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 3rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .stack-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 1px;
+      border: 1px solid var(--border);
+    }
+
+    .stack-item {
+      padding: 1.5rem;
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      transition: background 0.2s;
+    }
+
+    .stack-item:hover { background: var(--surface); }
+
+    .stack-icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
+
+    .stack-name {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--text);
+    }
+
+    .stack-level {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--muted);
+      margin-top: 0.25rem;
+    }
+
+    .projects-grid {
+      border: 1px solid var(--border);
+    }
+
+    .project-card {
+      background: var(--bg);
+      padding: 2.5rem;
+      border-bottom: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 1rem;
+      align-items: start;
+      transition: background 0.2s;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .project-card:hover { background: var(--surface); }
+    .project-card:last-child { border-bottom: none; }
+
+    .project-number {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+
+    .project-title {
+      font-size: 1.4rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+    }
+
+    .project-desc {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+      max-width: 480px;
+    }
+
+    .project-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .tag {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.08em;
+      padding: 0.3rem 0.7rem;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      border-radius: 2px;
+    }
+
+    .project-arrow {
+      font-size: 1.5rem;
+      color: var(--muted);
+      transition: color 0.2s, transform 0.2s;
+      margin-top: 0.5rem;
+    }
+
+    .project-card:hover .project-arrow {
+      color: var(--accent);
+      transform: translate(4px, -4px);
+    }
+
+    .contact-box {
+      border: 1px solid var(--border);
+      padding: 4rem;
+      text-align: center;
+    }
+
+    .contact-title {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 1rem;
+    }
+
+    .contact-sub {
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 2.5rem;
+    }
+
+    .contact-links {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    footer {
+      position: relative;
+      z-index: 1;
+      border-top: 1px solid var(--border);
+      padding: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    footer p {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 600px) {
+      .nav-links { display: none; }
+      .project-card { grid-template-columns: 1fr; }
+      .contact-box { padding: 2rem; }
+      footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-logo">Borba99</div>
+    <ul class="nav-links">
+      <li><a href="#stack">stack</a></li>
+      <li><a href="#projetos">projetos</a></li>
+      <li><a href="#contato">contato</a></li>
+    </ul>
+  </nav>
+
+  <div class="hero">
+    <p class="hero-tag">// backend developer</p>
+    <h1 class="hero-name">
+      Víttor Borba Rodrigues<br>
+      <span></span>
+    </h1>
+    <p class="hero-desc">
+      Construo APIs robustas, sistemas escaláveis e arquiteturas que funcionam de verdade. Focado em código limpo, performance e boas práticas.
+    </p>
+    <div class="hero-ctas">
+      <a href="#projetos" class="btn btn-primary">ver projetos</a>
+      <a href="https://github.com/Borba99" target="_blank" class="btn btn-outline">github ↗</a>
+    </div>
+  </div>
+
+  <section id="stack">
+    <p class="section-label">stack técnica</p>
+    <div class="stack-grid">
+      <div class="stack-item">
+        <div class="stack-icon">🟢</div>
+        <div class="stack-name">Node.js</div>
+        <div class="stack-level">intermediário</div>
+      </div>
+      <div class="stack-item">
+        <div class="stack-icon">🐍</div>
+        <div class="stack-name">Python</div>
+        <div class="stack-level">intermediário</div>
+      </div>
+      <div class="stack-item">
+        <div class="stack-icon">🐘</div>
+        <div class="stack-name">PostgreSQL</div>
+        <div class="stack-level">intermediário</div>
+      </div>
+      <div class="stack-item">
+        <div class="stack-icon">🍃</div>
+        <div class="stack-name">MongoDB</div>
+        <div class="stack-level">intermediário</div>
+      </div>
+      <div class="stack-item">
+        <div class="stack-icon">🔴</div>
+        <div class="stack-name">Redis</div>
+        <div class="stack-level">intermediário</div>
+      </div>
+      <div class="stack-item">
+        <div class="stack-icon">🐳</div>
+        <div class="stack-name">Docker</div>
+        <div class="stack-level">intermediário</div>
+      </div>
+      <div class="stack-item">
+        <div class="stack-icon">🔐</div>
+        <div class="stack-name">JWT / OAuth</div>
+        <div class="stack-level">básico</div>
+      </div>
+      <div class="stack-item">
+        <div class="stack-icon">☁️</div>
+        <div class="stack-name">AWS / GCP</div>
+        <div class="stack-level">básico</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="projetos">
+    <p class="section-label">projetos</p>
+    <div class="projects-grid">
+
+      <a href="<a href="https://github.com/Borba99/task-manager-api" target="_blank" class="project-card">
+  <div>
+    <p class="project-number">01</p>
+    <h2 class="project-title">Task Manager API</h2>
+    <p class="project-desc">
+      API REST para gerenciamento de tarefas com autenticação JWT, categorias e filtros. Banco PostgreSQL rodando em Docker.
+    </p>
+    <div class="project-tags">
+      <span class="tag">Python</span>
+      <span class="tag">FastAPI</span>
+      <span class="tag">PostgreSQL</span>
+      <span class="tag">Docker</span>
+      <span class="tag">JWT</span>
+    </div>
+  </div>
+  <div class="project-arrow">↗</div>
+</a>" target="_blank" class="project-card">
+        <div>
+          <p class="project-number">01</p>
+          <h2 class="project-title">API de Autenticação</h2>
+          <p class="project-desc">
+            Sistema completo de autenticação com JWT, refresh tokens, OAuth2 e controle de permissões por roles.
+          </p>
+          <div class="project-tags">
+            <span class="tag">Node.js</span>
+            <span class="tag">PostgreSQL</span>
+            <span class="tag">JWT</span>
+            <span class="tag">Docker</span>
+          </div>
+        </div>
+        <div class="project-arrow">↗</div>
+      </a>
+
+      <a href="https://github.com/seu-usuario/projeto-2" target="_blank" class="project-card">
+        <div>
+          <p class="project-number">02</p>
+          <h2 class="project-title">Sistema de Filas</h2>
+          <p class="project-desc">
+            Processamento assíncrono de tarefas com filas, workers e retry automático em caso de falha.
+          </p>
+          <div class="project-tags">
+            <span class="tag">Redis</span>
+            <span class="tag">Bull</span>
+            <span class="tag">Node.js</span>
+          </div>
+        </div>
+        <div class="project-arrow">↗</div>
+      </a>
+
+      <a href="https://github.com/seu-usuario/projeto-3" target="_blank" class="project-card">
+        <div>
+          <p class="project-number">03</p>
+          <h2 class="project-title">REST API — E-commerce</h2>
+          <p class="project-desc">
+            API completa para e-commerce com gestão de produtos, pedidos, pagamentos e relatórios.
+          </p>
+          <div class="project-tags">
+            <span class="tag">Python</span>
+            <span class="tag">FastAPI</span>
+            <span class="tag">PostgreSQL</span>
+            <span class="tag">Stripe</span>
+          </div>
+        </div>
+        <div class="project-arrow">↗</div>
+      </a>
+
+    </div>
+  </section>
+
+  <section id="contato">
+    <p class="section-label">contato</p>
+    <div class="contact-box">
+      <h2 class="contact-title">Vamos trabalhar juntos?</h2>
+      <p class="contact-sub">Aberto a novas oportunidades e projetos interessantes.</p>
+      <div class="contact-links">
+        <a href="vittorborbadavi.vb@gmail.com" class="btn btn-primary">enviar email</a>
+        <a href="https://www.linkedin.com/in/vittorborba/" target="_blank" class="btn btn-outline">linkedin ↗</a>
+        <a href="https://github.com/Borba99" target="_blank" class="btn btn-outline">github ↗</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2026 Seu Nome</p>
+    <p>Feito com HTML puro — sem frameworks</p>
+  </footer>
+
+</body>
+</html>
