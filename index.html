@@ -1,0 +1,607 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Portfolio tecnico de Vittor Borba: sistemas de gestao em Node.js, TypeScript e Python.">
+<meta name="color-scheme" content="light dark">
+<meta property="og:title" content="Sistemas de Víttor Borba">
+<meta property="og:description" content="Portfolio tecnico de Vittor Borba: sistemas de gestao em Node.js, TypeScript e Python.">
+<meta property="og:type" content="website">
+<title>Sistemas de Víttor Borba</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+
+<style>
+  :root {
+    --paper:      #F4F6F5;
+    --surface:    #FFFFFF;
+    --ink:        #10171A;
+    --slate:      #55666A;
+    --slate-dim:  #7E8F92;
+    --line:       #D4DCDB;
+    --line-soft:  #E4EAE9;
+    --accent:     #0A5C63;
+    --accent-ink: #084A50;
+    --accent-bg:  #E2EDEC;
+    --live:       #1C7347;
+    --live-bg:    #DFEFE5;
+
+    --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+    --body:    "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+    --mono:    "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper:      #0B1012;
+      --surface:    #121A1C;
+      --ink:        #E7EDEB;
+      --slate:      #93A4A6;
+      --slate-dim:  #6F8083;
+      --line:       #233033;
+      --line-soft:  #1A2426;
+      --accent:     #4FC9C2;
+      --accent-ink: #7BDCD6;
+      --accent-bg:  #14292B;
+      --live:       #4FD08A;
+      --live-bg:    #10291D;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper:      #0B1012;
+    --surface:    #121A1C;
+    --ink:        #E7EDEB;
+    --slate:      #93A4A6;
+    --slate-dim:  #6F8083;
+    --line:       #233033;
+    --line-soft:  #1A2426;
+    --accent:     #4FC9C2;
+    --accent-ink: #7BDCD6;
+    --accent-bg:  #14292B;
+    --live:       #4FD08A;
+    --live-bg:    #10291D;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 940px;
+    margin: 0 auto;
+    padding-inline: 24px;
+    padding-block: 56px 72px;
+  }
+
+  a { color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent-bg); }
+  a:hover { border-bottom-color: var(--accent); }
+  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+
+  /* ---------- cabeçalho ---------- */
+
+  .masthead { display: flex; flex-direction: column; gap: 18px; }
+
+  h1 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(2.5rem, 7vw, 3.9rem);
+    line-height: 1.02;
+    letter-spacing: -0.028em;
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  .role {
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: clamp(1rem, 2.4vw, 1.2rem);
+    color: var(--slate);
+    letter-spacing: -0.01em;
+    margin: -8px 0 0;
+  }
+
+  .datastrip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .datastrip div {
+    flex: 1 1 170px;
+    padding: 11px 16px 11px 0;
+    border-right: 1px solid var(--line-soft);
+  }
+  .datastrip div:last-child { border-right: 0; }
+  .datastrip dt {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--slate-dim);
+    margin: 0 0 3px;
+  }
+  .datastrip dd { margin: 0; font-size: 13.5px; line-height: 1.4; }
+
+  .lede {
+    max-width: 66ch;
+    font-size: 16.5px;
+    line-height: 1.68;
+    color: var(--slate);
+    margin: 0;
+  }
+  .lede strong { color: var(--ink); font-weight: 600; }
+
+  .contactbar { display: flex; flex-wrap: wrap; gap: 8px 22px; font-family: var(--mono); font-size: 13px; }
+
+  /* ---------- seções ---------- */
+
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--slate-dim);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 0 0 22px;
+  }
+  .eyebrow::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+
+  section { margin-top: 56px; }
+
+  /* ---------- ficha de sistema ---------- */
+
+  .fichas { display: flex; flex-direction: column; gap: 22px; }
+
+  .ficha {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-left-width: 3px;
+    border-left-color: var(--line);
+    padding: 26px 26px 24px;
+  }
+  .ficha.producao { border-left-color: var(--live); }
+
+  .ficha-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px 14px; }
+  .ficha h3 {
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: clamp(1.3rem, 3.4vw, 1.6rem);
+    letter-spacing: -0.02em;
+    margin: 0;
+    line-height: 1.15;
+  }
+
+  .chip {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    padding: 4px 9px;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+  .chip.live  { background: var(--live-bg);   color: var(--live); }
+  .chip.pess  { background: var(--accent-bg); color: var(--accent-ink); }
+
+  .purpose { max-width: 70ch; margin: 12px 0 0; color: var(--slate); }
+
+  .metrics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 34px;
+    margin: 20px 0 0;
+    padding: 14px 0;
+    border-top: 1px solid var(--line-soft);
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .metrics div { display: flex; flex-direction: column; gap: 1px; }
+  .metrics .n {
+    font-family: var(--mono);
+    font-size: 1.45rem;
+    font-weight: 500;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+  }
+  .metrics .k {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--slate-dim);
+  }
+
+  .ficha ul { margin: 20px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 11px; }
+  .ficha li { position: relative; padding-left: 18px; max-width: 74ch; }
+  .ficha li::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 0.62em;
+    width: 7px; height: 1px;
+    background: var(--accent);
+  }
+  .ficha li b { font-weight: 600; }
+
+  .stack { display: flex; flex-wrap: wrap; gap: 6px; margin: 22px 0 0; }
+  .stack span {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--slate);
+    border: 1px solid var(--line);
+    padding: 3px 8px;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+
+  .access {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--slate-dim);
+    margin: 16px 0 0;
+    line-height: 1.5;
+  }
+
+  /* ---------- diagrama ---------- */
+
+  .diagram { margin: 24px 0 0; overflow-x: auto; }
+  .diagram svg { display: block; width: 100%; min-width: 580px; max-width: 720px; height: auto; }
+  .diagram-cap {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--slate-dim);
+    margin: 0 0 12px;
+  }
+  .dg-box   { fill: var(--surface); stroke: var(--line); stroke-width: 1; }
+  .dg-box-a { fill: var(--accent-bg); stroke: var(--accent); stroke-width: 1; }
+  .dg-name  { fill: var(--ink); font-family: "Archivo", sans-serif; font-size: 13px; font-weight: 600; }
+  .dg-sub   { fill: var(--slate-dim); font-family: "IBM Plex Mono", monospace; font-size: 10px; }
+  .dg-line  { stroke: var(--slate-dim); stroke-width: 1.25; fill: none; }
+  .dg-lbl   { fill: var(--slate-dim); font-family: "IBM Plex Mono", monospace; font-size: 10px; }
+
+  /* ---------- projetos menores ---------- */
+
+  .minor { display: flex; flex-direction: column; }
+  .minor article {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.55fr);
+    gap: 6px 32px;
+    padding: 20px 0;
+    border-top: 1px solid var(--line);
+  }
+  .minor article:last-child { border-bottom: 1px solid var(--line); }
+  .minor h3 {
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 1.1rem;
+    letter-spacing: -0.015em;
+    margin: 0;
+    line-height: 1.25;
+  }
+  .minor .tech {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--slate-dim);
+    margin: 5px 0 0;
+    line-height: 1.5;
+  }
+  .minor p.desc { margin: 0; color: var(--slate); font-size: 14.5px; max-width: 60ch; }
+  .minor .repo { font-family: var(--mono); font-size: 11.5px; margin: 8px 0 0; }
+
+  /* ---------- stack geral ---------- */
+
+  .skills { display: flex; flex-direction: column; }
+  .skills div {
+    display: grid;
+    grid-template-columns: 180px minmax(0, 1fr);
+    gap: 4px 28px;
+    padding: 13px 0;
+    border-top: 1px solid var(--line-soft);
+  }
+  .skills div:first-child { border-top: 1px solid var(--line); }
+  .skills div:last-child { border-bottom: 1px solid var(--line); }
+  .skills dt {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--slate-dim);
+    padding-top: 3px;
+  }
+  .skills dd { margin: 0; font-size: 14.5px; }
+
+  /* ---------- rodapé ---------- */
+
+  footer {
+    margin-top: 60px;
+    padding-top: 26px;
+    border-top: 2px solid var(--ink);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 20px 40px;
+  }
+  footer h2 {
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 1.4rem;
+    letter-spacing: -0.02em;
+    margin: 0 0 6px;
+  }
+  footer .avail { color: var(--slate); font-size: 14.5px; max-width: 42ch; margin: 0; }
+  footer ul { list-style: none; margin: 0; padding: 0; font-family: var(--mono); font-size: 13.5px; display: flex; flex-direction: column; gap: 7px; }
+  footer ul span { color: var(--slate-dim); }
+
+  @media (max-width: 620px) {
+    .wrap { padding-block: 40px 56px; }
+    .ficha { padding: 20px 18px; }
+    .minor article { grid-template-columns: 1fr; gap: 10px; }
+    .skills div { grid-template-columns: 1fr; gap: 3px; }
+    .datastrip div { flex-basis: 100%; border-right: 0; border-bottom: 1px solid var(--line-soft); }
+    .datastrip div:last-child { border-bottom: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+  }
+</style>
+<style>img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="masthead">
+    <div>
+      <h1>Víttor Borba</h1>
+      <p class="role">Desenvolvedor back-end  ·  Node.js, TypeScript e Python</p>
+    </div>
+
+    <dl class="datastrip">
+      <div>
+        <dt>Base</dt>
+        <dd>Brasília&ndash;DF</dd>
+      </div>
+      <div>
+        <dt>Formação</dt>
+        <dd>Eng. de Software, UCB, 2027</dd>
+      </div>
+      <div>
+        <dt>Foco</dt>
+        <dd>APIs, dados e integrações</dd>
+      </div>
+      <div>
+        <dt>Disponibilidade</dt>
+        <dd>Estágio e vaga júnior</dd>
+      </div>
+    </dl>
+
+    <p class="lede">Construo sistemas de gestão completos, da modelagem do banco até a tela. Um deles
+      <strong>roda todos os dias em uma transportadora</strong>, controlando frete, combustível e
+      oficina de uma operação real. Os outros nasceram do mesmo lugar: um problema concreto de quem
+      precisa fechar o pedido, conferir a nota, marcar o horário.</p>
+
+    <nav class="contactbar" aria-label="Contato">
+      <a href="mailto:vittorborbadavi.vb@gmail.com">vittorborbadavi.vb@gmail.com</a>
+      <a href="https://linkedin.com/in/vittorborba" target="_blank" rel="noopener">linkedin.com/in/vittorborba</a>
+      <a href="https://github.com/Borba99" target="_blank" rel="noopener">github.com/Borba99</a>
+    </nav>
+  </header>
+
+  <section>
+    <h2 class="eyebrow">Sistemas</h2>
+
+    <div class="fichas">
+
+      <article class="ficha producao">
+        <div class="ficha-head">
+          <h3>SGF: Gestão de Fretes</h3>
+          <span class="chip live">Em produção</span>
+        </div>
+        <p class="purpose">Sistema que comanda a operação de uma transportadora: fretes, motoristas,
+          caminhões, clientes, mineradoras, oficina, tanque de combustível e notas fiscais. Em uso
+          diário pela equipe.</p>
+
+        <div class="metrics">
+          <div><span class="n">140</span><span class="k">commits</span></div>
+          <div><span class="n">15</span><span class="k">grupos de rotas</span></div>
+          <div><span class="n">14</span><span class="k">modelos de dados</span></div>
+        </div>
+
+        <ul>
+          <li><b>A equipe lança despesa conversando no WhatsApp.</b> O sistema acompanha os grupos
+            operacionais pela Evolution API, interpreta as mensagens que os motoristas e o pessoal da
+            oficina já mandavam naturalmente e registra despesa e abastecimento sozinho. Antes, alguém
+            digitava tudo de novo no fim do dia.</li>
+          <li>Leitura de nota fiscal por <b>OCR</b> (Tesseract.js) e parsing do XML da NF-e, para não
+            redigitar dado que já existe no documento.</li>
+          <li>Controle de tanque próprio e de oficina, com relatório em PDF e exportação para Excel,
+            o formato que o contador do cliente realmente usa.</li>
+          <li>JWT com perfil de acesso por função, rate limiting, log estruturado em Winston, rotinas
+            agendadas com node-cron e rotina de backup do banco.</li>
+        </ul>
+
+        <div class="stack">
+          <span>Node.js</span><span>Express</span><span>Prisma</span><span>PostgreSQL</span>
+          <span>React</span><span>Zustand</span><span>React Query</span><span>Evolution API</span>
+          <span>Tesseract.js</span><span>Docker</span>
+        </div>
+
+        <p class="access">Código privado, sistema de cliente em operação. Apresento a arquitetura e o
+          código em entrevista.</p>
+      </article>
+
+      <article class="ficha">
+        <div class="ficha-head">
+          <h3>Gestão de Pedidos de Compra</h3>
+          <span class="chip pess">Projeto próprio</span>
+        </div>
+        <p class="purpose">Plataforma multiempresa para o ciclo inteiro de compras: catálogo e lista de
+          preço, pedido, pendência de entrega, nota fiscal e indicadores. É o projeto onde fui mais
+          longe em arquitetura.</p>
+
+        <div class="metrics">
+          <div><span class="n">41</span><span class="k">modelos de dados</span></div>
+          <div><span class="n">19</span><span class="k">módulos de domínio</span></div>
+          <div><span class="n">3</span><span class="k">níveis de teste</span></div>
+        </div>
+
+        <ul>
+          <li><b>Trabalho pesado sai da requisição.</b> Importação de planilha e geração de relatório
+            entram numa fila em Redis (BullMQ) e são processadas por um worker separado da API, então quem
+            está na tela não espera.</li>
+          <li>Multiempresa de verdade: isolamento por tenant e trilha de auditoria por registro.</li>
+          <li>Senha com <b>Argon2</b>, segundo fator por TOTP, Helmet, rate limiting e validação de
+            toda entrada com Zod.</li>
+          <li>Assinatura e leitura de XML de NF-e; relatórios em Excel e PDF.</li>
+          <li>Testes em três níveis (Vitest e Supertest na API, Playwright no fluxo ponta a ponta) e
+            API documentada em OpenAPI.</li>
+        </ul>
+
+        <div class="diagram">
+          <p class="diagram-cap">Arquitetura</p>
+          <svg viewBox="0 0 720 236" role="img" aria-label="Diagrama: o front-end React chama a API em Express, que lê e escreve no PostgreSQL. Tarefas pesadas são enfileiradas no Redis com BullMQ e processadas por um worker separado, que também escreve no PostgreSQL.">
+            <rect class="dg-box" x="1" y="22" width="132" height="56" rx="2"></rect>
+            <text class="dg-name" x="67" y="46" text-anchor="middle">Web</text>
+            <text class="dg-sub"  x="67" y="62" text-anchor="middle">React + Vite</text>
+
+            <rect class="dg-box-a" x="196" y="22" width="132" height="56" rx="2"></rect>
+            <text class="dg-name" x="262" y="46" text-anchor="middle">API</text>
+            <text class="dg-sub"  x="262" y="62" text-anchor="middle">Express + Prisma</text>
+
+            <rect class="dg-box" x="568" y="22" width="150" height="56" rx="2"></rect>
+            <text class="dg-name" x="643" y="46" text-anchor="middle">PostgreSQL</text>
+            <text class="dg-sub"  x="643" y="62" text-anchor="middle">41 modelos</text>
+
+            <rect class="dg-box" x="196" y="158" width="132" height="56" rx="2"></rect>
+            <text class="dg-name" x="262" y="182" text-anchor="middle">Fila</text>
+            <text class="dg-sub"  x="262" y="198" text-anchor="middle">Redis + BullMQ</text>
+
+            <rect class="dg-box" x="392" y="158" width="132" height="56" rx="2"></rect>
+            <text class="dg-name" x="458" y="182" text-anchor="middle">Worker</text>
+            <text class="dg-sub"  x="458" y="198" text-anchor="middle">processo próprio</text>
+
+            <path class="dg-line" d="M133 50 L190 50"></path>
+            <path class="dg-line" d="M190 50 l-7 -3.5 v7 z" style="fill: var(--slate-dim); stroke: none"></path>
+            <text class="dg-lbl" x="161" y="40" text-anchor="middle">HTTP</text>
+
+            <path class="dg-line" d="M328 50 L562 50"></path>
+            <path class="dg-line" d="M562 50 l-7 -3.5 v7 z" style="fill: var(--slate-dim); stroke: none"></path>
+            <text class="dg-lbl" x="445" y="40" text-anchor="middle">consulta e escreve</text>
+
+            <path class="dg-line" d="M262 78 L262 152"></path>
+            <path class="dg-line" d="M262 152 l-3.5 -7 h7 z" style="fill: var(--slate-dim); stroke: none"></path>
+            <text class="dg-lbl" x="272" y="120" text-anchor="start">enfileira</text>
+
+            <path class="dg-line" d="M328 186 L386 186"></path>
+            <path class="dg-line" d="M386 186 l-7 -3.5 v7 z" style="fill: var(--slate-dim); stroke: none"></path>
+            <text class="dg-lbl" x="357" y="176" text-anchor="middle">consome</text>
+
+            <path class="dg-line" d="M524 186 L643 186 L643 84" stroke-dasharray="4 3"></path>
+            <path class="dg-line" d="M643 84 l-3.5 7 h7 z" style="fill: var(--slate-dim); stroke: none"></path>
+            <text class="dg-lbl" x="653" y="140" text-anchor="start">grava resultado</text>
+          </svg>
+        </div>
+
+        <div class="stack">
+          <span>TypeScript</span><span>Node.js</span><span>Express</span><span>Prisma</span>
+          <span>PostgreSQL</span><span>Redis</span><span>BullMQ</span><span>React</span>
+          <span>Playwright</span><span>Vitest</span><span>Docker</span>
+        </div>
+
+        <p class="access">Repositório privado enquanto trato os segredos do histórico. Mostro o código
+          em entrevista.</p>
+      </article>
+
+    </div>
+  </section>
+
+  <section>
+    <h2 class="eyebrow">Também construí</h2>
+
+    <div class="minor">
+      <article>
+        <div>
+          <h3>Task Manager API</h3>
+          <p class="tech">Python · FastAPI · SQLAlchemy · PostgreSQL · pytest</p>
+        </div>
+        <div>
+          <p class="desc">API REST com autenticação JWT e refresh token, CRUD de tarefas e categorias
+            com filtro por status e prioridade, banco em Docker Compose e testes com pytest e httpx.</p>
+          <p class="repo"><a href="https://github.com/Borba99/task-manager-api" target="_blank" rel="noopener">github.com/Borba99/task-manager-api</a>  ·  código aberto</p>
+        </div>
+      </article>
+
+      <article>
+        <div>
+          <h3>Agendamento para Barbearia</h3>
+          <p class="tech">Next.js · TypeScript · Prisma · PostgreSQL · Tailwind CSS</p>
+        </div>
+        <div>
+          <p class="desc">Aplicação full stack de agendamento de serviços, com autenticação própria
+            (JWT via jose), validação com Zod e 12 modelos de dados cobrindo cliente, profissional,
+            serviço e horário.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="eyebrow">Stack</h2>
+    <dl class="skills">
+      <div>
+        <dt>Back-end</dt>
+        <dd>Node.js, TypeScript, Express, Python, FastAPI, APIs REST, autenticação JWT, filas com BullMQ</dd>
+      </div>
+      <div>
+        <dt>Banco de dados</dt>
+        <dd>PostgreSQL, Prisma, SQLAlchemy, Redis, modelagem e migrações</dd>
+      </div>
+      <div>
+        <dt>Infra e qualidade</dt>
+        <dd>Docker e Docker Compose, Git e GitHub, testes automatizados (Vitest, Supertest, pytest, Playwright), log estruturado</dd>
+      </div>
+      <div>
+        <dt>Front-end</dt>
+        <dd>React, Next.js, TanStack Query, Tailwind CSS</dd>
+      </div>
+      <div>
+        <dt>Integrações</dt>
+        <dd>XML de NF-e, OCR, WhatsApp via Evolution API, geração de Excel e PDF</dd>
+      </div>
+    </dl>
+  </section>
+
+  <footer>
+    <div>
+      <h2>Vamos conversar</h2>
+      <p class="avail">Procuro estágio ou vaga júnior em back-end. Respondo no mesmo dia.</p>
+    </div>
+    <ul>
+      <li><span>e-mail</span> <a href="mailto:vittorborbadavi.vb@gmail.com">vittorborbadavi.vb@gmail.com</a></li>
+      <li><span>telefone</span> (61) 99850-2303</li>
+      <li><span>linkedin</span> <a href="https://linkedin.com/in/vittorborba" target="_blank" rel="noopener">in/vittorborba</a></li>
+      <li><span>github</span> <a href="https://github.com/Borba99" target="_blank" rel="noopener">Borba99</a></li>
+    </ul>
+  </footer>
+
+</div>
+</body>
+</html>
